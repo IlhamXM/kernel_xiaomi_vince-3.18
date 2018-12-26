@@ -127,7 +127,7 @@
 
 static struct synaptics_rmi4_data *rmi4_data;
 
-bool synaptics_gesture_func_on = false;
+bool synaptics_gesture_func_on = true;
 #if WAKEUP_GESTURE
 #define WAKEUP_OFF 4
 #define WAKEUP_ON 5
