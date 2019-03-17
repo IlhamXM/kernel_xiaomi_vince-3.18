@@ -131,6 +131,21 @@ config CPU_FREQ_DEFAULT_GOV_ELECTRON
 	  loading your cpufreq low-level hardware driver, using the
 	  'electron' governor for latency-sensitive workloads.
 
+config CPU_FREQ_DEFAULT_GOV_ALUCARD
+	bool "alucard"
+	select CPU_FREQ_GOV_ALUCARD
+	help
+
+config CPU_FREQ_DEFAULT_GOV_DARKNESS
+	bool "darkness"
+	select CPU_FREQ_GOV_DARKNESS
+	help
+
+config CPU_FREQ_DEFAULT_GOV_INTERACTIVEX
+	bool "interactivex"
+	select CPU_FREQ_GOV_INTERACTIVEX
+	help
+
 config CPU_FREQ_DEFAULT_GOV_SCHED
 	bool "sched"
 	select CPU_FREQ_GOV_INTERACTIVE
@@ -253,6 +268,18 @@ config CPU_FREQ_GOV_ELECTRON
 	depends on CPU_FREQ
 	help
 	  'electron' - another tuned interactive with extra options
+
+config CPU_FREQ_GOV_ALUCARD
+	tristate "'alucard' cpufreq governor"
+	depends on CPU_FREQ
+
+config CPU_FREQ_GOV_DARKNESS
+	tristate "'darkness' cpufreq governor"
+	depends on CPU_FREQ
+
+config CPU_FREQ_GOV_INTERACTIVEX
+	tristate "'interactivex' cpufreq governor"
+	depends on CPU_FREQ
 
 comment "CPU frequency scaling drivers"
 
