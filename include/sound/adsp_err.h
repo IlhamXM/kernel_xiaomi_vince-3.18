@@ -1,9 +1,5 @@
 /*
-<<<<<<< HEAD
- * Copyright (c) 2015-2016, The Linux Foundation. All rights reserved.
-=======
  * Copyright (c) 2015, The Linux Foundation. All rights reserved.
->>>>>>> fbc216a07205... sound: adsp_err: initial version of adsp error code header file
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 and
@@ -18,11 +14,6 @@
 #ifndef __ADSP_ERR__
 #define __ADSP_ERR__
 
-<<<<<<< HEAD
-int adsp_err_get_lnx_err_code(u32 adsp_error);
-
-char *adsp_err_get_err_str(u32 adsp_error);
-=======
 #include <linux/errno.h>
 #include <sound/apr_audio-v2.h>
 
@@ -121,6 +112,6 @@ static inline char *adsp_err_get_err_str(u32 adsp_error)
 	else
 		return adsp_err_code_info[adsp_error].adsp_err_str;
 }
->>>>>>> fbc216a07205... sound: adsp_err: initial version of adsp error code header file
 
 #endif
+
