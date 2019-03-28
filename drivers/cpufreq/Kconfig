@@ -141,11 +141,6 @@ config CPU_FREQ_DEFAULT_GOV_DARKNESS
 	select CPU_FREQ_GOV_DARKNESS
 	help
 
-config CPU_FREQ_DEFAULT_GOV_INTERACTIVEX
-	bool "interactivex"
-	select CPU_FREQ_GOV_INTERACTIVEX
-	help
-
 config CPU_FREQ_DEFAULT_GOV_SCHED
 	bool "sched"
 	select CPU_FREQ_GOV_INTERACTIVE
@@ -275,10 +270,6 @@ config CPU_FREQ_GOV_ALUCARD
 
 config CPU_FREQ_GOV_DARKNESS
 	tristate "'darkness' cpufreq governor"
-	depends on CPU_FREQ
-
-config CPU_FREQ_GOV_INTERACTIVEX
-	tristate "'interactivex' cpufreq governor"
 	depends on CPU_FREQ
 
 comment "CPU frequency scaling drivers"
