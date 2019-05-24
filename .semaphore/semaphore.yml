@@ -1,0 +1,17 @@
+version: v1.0
+name: HackKernel
+agent:
+  machine:
+    type: e1-standard-8
+    os_image: ubuntu1804
+blocks:
+  - name: "Build"
+    task:
+      jobs:
+      - name: Compile Kernel
+        commands:
+          - checkout
+          - install-package bc build-essential zip curl libstdc++6
+          - wget https://raw.githubusercontent.com/Kry9toN/Scripts/master/semaphore318
+          - bash semaphore49
+
