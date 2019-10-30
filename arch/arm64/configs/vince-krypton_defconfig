@@ -3676,14 +3676,14 @@ CONFIG_UIO_MSM_SHAREDMEM=y
 # Microsoft Hyper-V guest support
 #
 CONFIG_STAGING=y
-# CONFIG_PRISM2_USB is not set
-# CONFIG_R8712U is not set
-# CONFIG_R8188EU is not set
-# CONFIG_R8723AU is not set
-# CONFIG_RTS5208 is not set
-# CONFIG_LINE6_USB is not set
-# CONFIG_FB_XGI is not set
-# CONFIG_FT1000 is not set
+CONFIG_PRISM2_USB=y
+CONFIG_R8712U=y
+CONFIG_R8188EU=y
+CONFIG_R8723AU=y
+CONFIG_RTS5208=y
+CONFIG_LINE6_USB=y
+CONFIG_FB_XGI=y
+CONFIG_FT1000=y
 
 #
 # Speakup console speech
