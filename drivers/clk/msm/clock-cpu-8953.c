@@ -115,11 +115,16 @@ static struct pll_clk apcs_hf_pll = {
 	.init_test_ctl = true,
 	.test_ctl_dbg = true,
 	.masks = {
+		.pre_div_mask = BIT(12),
+		.post_div_mask = BM(9, 8),
+		.mn_en_mask = BIT(24),
 		.main_output_mask = BIT(0),
 		.early_output_mask = BIT(3),
 		.lock_mask = BIT(31),
 	},
 	.vals = {
+		.post_div_masked = 0x100,
+		.pre_div_masked = 0x0,
 		.config_ctl_val = 0x200D4828,
 		.config_ctl_hi_val = 0x006,
 		.test_ctl_hi_val = 0x00004000,
@@ -151,7 +156,6 @@ static struct mux_div_clk a53ssmux_perf = {
 	},
 	.c = {
 		.dbg_name = "a53ssmux_perf",
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		.ops = &clk_ops_mux_div_clk,
 		CLK_INIT(a53ssmux_perf.c),
 	},
@@ -173,7 +177,6 @@ static struct mux_div_clk a53ssmux_pwr = {
 	},
 	.c = {
 		.dbg_name = "a53ssmux_pwr",
-		.flags = CLKFLAG_NO_RATE_CACHE,
 		.ops = &clk_ops_mux_div_clk,
 		CLK_INIT(a53ssmux_pwr.c),
 	},
@@ -462,27 +465,18 @@ static struct cpu_clk_8953 *cpuclk[] = { &a53_pwr_clk, &a53_perf_clk,
 
 static struct clk *logical_cpu_to_clk(int cpu)
 {
-	struct device_node *cpu_node;
-	const u32 *cell;
-	u64 hwid;
+	struct device_node *cpu_node = of_get_cpu_node(cpu, NULL);
+	u32 reg;
 
-	cpu_node = of_get_cpu_node(cpu, NULL);
-	if (!cpu_node)
-		goto fail;
+	if (cpu_node && !of_property_read_u32(cpu_node, "reg", &reg)) {
+		if ((reg | a53_pwr_clk.cpu_reg_mask) ==
+						a53_pwr_clk.cpu_reg_mask)
+			return &a53_pwr_clk.c;
+		if ((reg | a53_perf_clk.cpu_reg_mask) ==
+						a53_perf_clk.cpu_reg_mask)
+			return &a53_perf_clk.c;
+	}
 
-	cell = of_get_property(cpu_node, "reg", NULL);
-	if (!cell) {
-		pr_err("%s: missing reg property\n", cpu_node->full_name);
-		goto fail;
- 	}
- 
-	hwid = of_read_number(cell, of_n_addr_cells(cpu_node));
-	if ((hwid | a53_pwr_clk.cpu_reg_mask) == a53_pwr_clk.cpu_reg_mask)
-		return &a53_pwr_clk.c;
-	if ((hwid | a53_perf_clk.cpu_reg_mask) == a53_perf_clk.cpu_reg_mask)
-		return &a53_perf_clk.c;
-
-fail:
 	return NULL;
 }
 
@@ -494,11 +488,6 @@ static int add_opp(struct clk *c, struct device *dev, unsigned long max_rate)
 	long ret;
 	bool first = true;
 	int j = 1;
-    
-	if (!dev) {
-		pr_warn("clock-cpu: NULL CPU device\n");
-		return -ENODEV;
-	}
 
 	while (1) {
 		rate = c->fmax[j++];
@@ -683,9 +672,7 @@ static void get_speed_bin(struct platform_device *pdev, int *bin,
 	pte_efuse = readl_relaxed(base);
 	devm_iounmap(&pdev->dev, base);
 
-	//*bin = (pte_efuse >> 2) & 0x7;
-        //*Force the use of speed-bin 7
-	*bin = 7;
+	*bin = (pte_efuse >> 8) & 0x7;
 
 	dev_info(&pdev->dev, "Speed bin: %d PVS Version: %d\n", *bin,
 								*version);
