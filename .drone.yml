@@ -4,7 +4,7 @@ name: build
 
 steps:
 - name: cooked
-  image: Extended/image:latest
+  image: extended/image:latest
   environment:
     token:
       from_secret: bot_api
